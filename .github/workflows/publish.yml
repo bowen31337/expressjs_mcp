@@ -70,8 +70,10 @@ jobs:
           # Check if this version exists on npm
           if npm view expressjs-mcp@$CURRENT_VERSION version 2>/dev/null; then
             echo "version_exists=true" >> $GITHUB_OUTPUT
+            echo "Version $CURRENT_VERSION already exists on npm"
           else
             echo "version_exists=false" >> $GITHUB_OUTPUT
+            echo "Version $CURRENT_VERSION is new, will publish"
           fi
 
       - name: Publish to NPM
@@ -102,8 +104,8 @@ jobs:
             
             Use with npx:
             ```bash
-            npx expressjs-mcp init
-            npx expressjs-mcp test --url http://localhost:3000/mcp
+            npx expressjs-mcp --url http://localhost:3000/mcp
+            npx expressjs-mcp --debug
             ```
           draft: false
           prerelease: false

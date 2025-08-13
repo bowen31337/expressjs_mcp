@@ -1,6 +1,6 @@
 {
 	"name": "expressjs-mcp",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Expose your Express endpoints as MCP tools with zero configuration, schema preservation, and streaming support",
 	"keywords": [
 		"express",
@@ -29,7 +29,7 @@
 	"main": "dist/index.cjs",
 	"module": "dist/index.mjs",
 	"types": "dist/index.d.ts",
-	"files": ["dist/", "bin/", "scripts/", "README.md", "LICENSE"],
+	"files": ["dist/", "README.md", "LICENSE"],
 	"engines": {
 		"node": ">=18.0.0"
 	},
@@ -45,10 +45,10 @@
 		"format": "biome format --write .",
 		"test": "vitest run",
 		"test:watch": "vitest",
-		"mcp": "node dist/expressjs-mcp.js"
+		"mcp": "node dist/bin/expressjs-mcp.js"
 	},
 	"bin": {
-		"expressjs-mcp": "./dist/expressjs-mcp.js"
+		"expressjs-mcp": "./dist/bin/expressjs-mcp.js"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.8.3",
