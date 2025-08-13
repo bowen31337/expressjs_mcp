@@ -41,10 +41,12 @@ export class MCPServer {
 	private baseUrl: string;
 	private debug: boolean;
 	private tools: MCPTool[] = [];
+	private expressMcp?: ExpressMCP;
 
 	constructor(options: MCPServerOptions = {}) {
 		this.baseUrl = options.url || "http://localhost:3000";
 		this.debug = options.debug || false;
+		this.expressMcp = options.expressMcp;
 	}
 
 	async start(): Promise<void> {
@@ -78,7 +80,7 @@ export class MCPServer {
 		if (this.expressMcp) {
 			// Invoke tool directly through Express app
 			const dispatcher = (
-				this.expressMcp as {
+				this.expressMcp as unknown as {
 					dispatcher: {
 						dispatch: (
 							method: string,
