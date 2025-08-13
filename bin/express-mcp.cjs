@@ -47,7 +47,7 @@ program
 	.description("Initialize expressjs-mcp in current project")
 	.option("--typescript", "Generate TypeScript configuration")
 	.action((options) => {
-		          console.log("🚀 Initializing expressjs-mcp in current project...");
+		console.log("🚀 Initializing expressjs-mcp in current project...");
 
 		const isTypeScript = options.typescript || fs.existsSync("tsconfig.json");
 		const ext = isTypeScript ? "ts" : "js";
@@ -140,7 +140,7 @@ setupMCP().catch(console.error);
 			mcpServers: {
 				"express-api": {
 					command: "npx",
-					                                  args: ["expressjs-mcp", "bridge"],
+					args: ["expressjs-mcp", "bridge"],
 					env: {
 						EXPRESS_MCP_URL: "http://localhost:3000/mcp",
 					},
