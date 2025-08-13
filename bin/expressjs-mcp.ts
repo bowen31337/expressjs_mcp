@@ -2,18 +2,18 @@
 
 /**
  * Express MCP CLI
- * 
+ *
  * Native MCP server implementation using the official SDK.
  * This connects to an Express MCP server and exposes its tools as MCP tools.
- * 
+ *
  * Usage:
  *   expressjs-mcp [options]
- * 
+ *
  * Options:
  *   --url <url>    Express MCP URL (default: http://localhost:3000/mcp)
  *   --debug        Enable debug logging
  *   --help         Show help
- * 
+ *
  * Environment Variables:
  *   EXPRESS_MCP_URL - URL of Express MCP server
  *   DEBUG - Enable debug mode
