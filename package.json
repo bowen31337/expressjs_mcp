@@ -37,18 +37,16 @@
 		"access": "public"
 	},
 	"scripts": {
-		"build": "tsup src/index.ts --format esm,cjs --dts",
+		"build": "tsup src/index.ts src/mcp-server.ts --format esm,cjs --dts",
 		"dev": "tsup --watch",
 		"lint": "biome check .",
 		"lint:fix": "biome check --write .",
 		"test": "vitest run",
 		"test:watch": "vitest",
-		"mcp-bridge": "node scripts/mcp-bridge.cjs",
-		"mcp": "node bin/express-mcp.cjs"
+		"mcp": "node bin/expressjs-mcp"
 	},
 	"bin": {
-		"expressjs-mcp": "./bin/express-mcp.cjs",
-		"expressjs-mcp-bridge": "./scripts/mcp-bridge.cjs"
+		"expressjs-mcp": "./bin/expressjs-mcp"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.8.3",
@@ -64,6 +62,7 @@
 		"@modelcontextprotocol/sdk": "^0.5.0",
 		"commander": "^12.0.0",
 		"express": "^4.19.2",
+		"reflect-metadata": "^0.2.2",
 		"zod": "^3.23.8",
 		"zod-to-json-schema": "^3.23.5"
 	},

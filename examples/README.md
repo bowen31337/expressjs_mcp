@@ -1,57 +1,165 @@
-# Express MCP Examples
+# Express-MCP Examples
 
-This directory contains example implementations demonstrating different features of Express MCP.
+This directory contains comprehensive examples demonstrating various features and use cases of Express-MCP, following the same pattern as [FastAPI-MCP](https://github.com/tadata-org/fastapi_mcp).
 
 ## 📁 **Available Examples**
 
-### 1. **Basic Example** (`basic/`)
-- Simple Express server with basic CRUD operations
-- Demonstrates core MCP integration
-- Perfect for getting started
+### Core Examples (FastAPI-MCP Pattern)
 
-### 2. **Streaming Example** (`streaming/`)
-- Advanced streaming capabilities
-- Multiple streaming protocols (SSE, NDJSON, Chunked)
-- Real-time data transmission examples
+1. **[01-basic-usage](./01-basic-usage)** - Simplest way to add MCP to an Express app
+2. **[02-full-schema](./02-full-schema)** - Rich schema descriptions using Zod
+3. **[03-custom-endpoints](./03-custom-endpoints)** - Selective route exposure with filters
+4. **[04-separate-server](./04-separate-server)** - Standalone MCP gateway server
+5. **[07-timeout](./07-timeout)** - Configure timeouts for long-running operations
+
+### Advanced Examples
+
+- **[streaming](./streaming)** - Real-time streaming responses (SSE, NDJSON)
+- **[streaming-decorators](./streaming-decorators)** - Streaming with TypeScript decorators
+- **[basic](./basic)** - Original basic example with minimal setup
 
 ## 🚀 **Quick Start**
 
-### Prerequisites
+All examples share a common Express app with an items CRUD API, similar to FastAPI-MCP examples.
+
 ```bash
-# Install dependencies (from project root)
+# Install dependencies
 pnpm install
 
-# Build the project
-pnpm build
+# Run any example
+pnpm tsx examples/01-basic-usage/server.ts
+pnpm tsx examples/02-full-schema/server.ts
+pnpm tsx examples/03-custom-endpoints/server.ts
+# ... etc
 ```
 
-### Running Examples
+## ✨ **Features Demonstrated**
 
-#### Basic Example
+### TypeScript Decorators
+
+Express-MCP supports TypeScript decorators for defining routes and schemas:
+
+```typescript
+@Controller("/items")
+export class ItemsController {
+  @Get("/:id")
+  @Schema({
+    params: z.object({ id: z.number() }),
+    response: ItemSchema
+  })
+  async getItem(req: Request, res: Response) {
+    // Implementation
+  }
+}
+```
+
+### Schema Validation with Zod
+
+Automatic input/output validation using Zod schemas:
+
+```typescript
+const ItemSchema = z.object({
+  id: z.number().positive(),
+  name: z.string().min(1),
+  price: z.number().positive(),
+});
+
+const mcp = new ExpressMCP(app, {
+  schemaAnnotations: {
+    "GET /items": {
+      input: QuerySchema,
+      output: z.array(ItemSchema),
+    }
+  }
+});
+```
+
+### Filtering Routes
+
+Control which routes are exposed as MCP tools:
+
+```typescript
+const mcp = new ExpressMCP(app, {
+  include: (route) => route.method === "GET",
+  exclude: (route) => route.path.includes("admin"),
+});
+```
+
+### Streaming Support
+
+Multiple streaming protocols supported:
+
+- Server-Sent Events (SSE)
+- Newline-Delimited JSON (NDJSON)
+- Plain text streaming
+- Chunked transfer encoding
+
+### Standalone MCP Server
+
+Run MCP gateway separately from main app:
+
+```typescript
+// Main app on port 3000
+app.listen(3000);
+
+// MCP gateway on port 7878
+await mcp.startStandalone({ port: 7878 });
+```
+
+## 🧪 **Testing MCP Tools**
+
+### List Available Tools
+
 ```bash
-# Navigate to basic example
-cd examples/basic
-
-# Start the server
-npx tsx server.ts
-# or
-node server.js
-
-# Server will start on http://localhost:3000
-# MCP endpoints: /mcp/tools and /mcp/invoke
+curl http://localhost:3001/mcp/tools
 ```
 
-#### Streaming Example
+### Invoke a Tool
+
 ```bash
-# Navigate to streaming example
-cd examples/streaming
-
-# Start the server
-npx tsx server.ts
-
-# Server will start on http://localhost:3000
-# Includes multiple streaming endpoints
+curl -X POST http://localhost:3001/mcp/invoke \
+  -H "Content-Type: application/json" \
+  -d '{
+    "toolName": "GET_/items",
+    "args": { "skip": 0, "limit": 10 }
+  }'
 ```
+
+### Streaming Invocation
+
+```bash
+curl -X POST http://localhost:3001/mcp/invoke \
+  -H "Content-Type: application/json" \
+  -d '{
+    "toolName": "GET_/stream/events",
+    "args": {},
+    "streaming": true
+  }'
+```
+
+## 🏗️ **Architecture**
+
+All examples follow this pattern:
+
+1. **Express App**: Standard Express application with routes
+2. **ExpressMCP Wrapper**: Adds MCP capabilities
+3. **Route Discovery**: Automatic introspection of Express routes
+4. **Schema Resolution**: Zod schemas or OpenAPI specs
+5. **MCP Gateway**: HTTP endpoints for tool discovery and invocation
+
+## 📊 **Comparison with FastAPI-MCP**
+
+| Feature | FastAPI-MCP | Express-MCP |
+|---------|-------------|-------------|
+| Decorator Support | Python decorators | TypeScript decorators |
+| Schema Validation | Pydantic | Zod |
+| Route Discovery | FastAPI routes | Express router introspection |
+| Streaming | SSE, WebSocket | SSE, NDJSON, Chunked |
+| Standalone Server | ✅ | ✅ |
+| OpenAPI Support | Native | Via annotations |
+| Auth Integration | ✅ | ✅ |
+| Timeout Config | ✅ | ✅ |
+| Dynamic Tools | ✅ | ✅ |
 
 ## 🔧 **MCP Client Configuration**
 
@@ -62,247 +170,116 @@ Create or update `~/Library/Application Support/Claude/claude_desktop_config.jso
 ```json
 {
   "mcpServers": {
-    "expressjs-mcp-basic": {
-      "command": "node",
-      "args": ["/path/to/your/expressjs_mcp/scripts/mcp-bridge.cjs"],
-      "env": {
-        "EXPRESS_MCP_URL": "http://localhost:3000/mcp"
-      }
+    "expressjs-mcp": {
+      "command": "npx",
+      "args": ["expressjs-mcp", "--url", "http://localhost:3001/mcp"]
     }
   }
 }
 ```
-
-**Note**: Replace `/path/to/your/expressjs_mcp` with your actual project path.
 
 ### Cursor IDE
 
-Add to your Cursor settings (`.cursor-settings/settings.json`):
+Add to `.cursor/mcp.json`:
 
 ```json
 {
-  "mcp.servers": {
-    "expressjs-mcp-basic": {
-      "command": "node",
-      "args": ["/path/to/your/expressjs_mcp/scripts/mcp-bridge.cjs"],
-      "env": {
-        "EXPRESS_MCP_URL": "http://localhost:3000/mcp"
-      }
+  "mcpServers": {
+    "expressjs-mcp": {
+      "command": "npx",
+      "args": ["expressjs-mcp", "--url", "http://localhost:3001/mcp"]
     }
   }
 }
 ```
 
-**Note**: Replace `/path/to/your/expressjs_mcp` with your actual project path.
+## 📋 **Example Walkthroughs**
 
-### VS Code with MCP Extension
+### Example 01: Basic Usage
 
-Add to VS Code settings:
+1. **Start**: `pnpm tsx examples/01-basic-usage/server.ts`
+2. **Explore**: Visit http://localhost:3001/mcp/tools
+3. **Test**: All routes automatically exposed as MCP tools
+4. **No configuration needed** - just wrap and go!
 
-```json
-{
-  "mcp.servers": [
-    {
-      "name": "expressjs-mcp-basic",
-      "command": "node",
-      "args": ["/path/to/your/expressjs_mcp/scripts/mcp-bridge.cjs"],
-      "env": {
-        "EXPRESS_MCP_URL": "http://localhost:3000/mcp"
-      }
-    }
-  ]
-}
-```
+### Example 02: Full Schema
 
-**Note**: Replace `/path/to/your/expressjs_mcp` with your actual project path.
+1. **Start**: `pnpm tsx examples/02-full-schema/server.ts`
+2. **Observe**: Rich schemas with Zod validation
+3. **Test validation**: Try invalid inputs to see error messages
+4. **Benefits**: Type safety and auto-documentation
 
-## 📋 **Step-by-Step Setup Guide**
+### Example 03: Custom Endpoints
 
-### 1. **Start the Example Server**
+1. **Start**: `pnpm tsx examples/03-custom-endpoints/server.ts`
+2. **Compare**: Three different filtering strategies
+3. **Check endpoints**: `/mcp`, `/mcp-whitelist`, `/mcp-patterns`
+4. **Use case**: Security and API versioning
 
-Choose your example and start the server:
+### Example 04: Separate Server
 
-```bash
-# For basic example
-cd examples/basic && npx tsx server.ts
+1. **Start**: `pnpm tsx examples/04-separate-server/server.ts`
+2. **Architecture**: Main app (3004) + MCP gateway (7878)
+3. **Benefits**: Independent scaling and deployment
+4. **Use case**: Microservices architecture
 
-# For streaming example  
-cd examples/streaming && npx tsx server.ts
-```
+### Example 07: Timeout Configuration
 
-You should see output like:
-```
-🚀 Server running on http://localhost:3000
-📊 MCP tools: http://localhost:3000/mcp/tools
-🔗 MCP invoke: http://localhost:3000/mcp/invoke
-```
+1. **Start**: `pnpm tsx examples/07-timeout/server.ts`
+2. **Test timeouts**: Short (3s), Default (30s), Long (60s)
+3. **Override**: Per-request timeout in payload
+4. **Use case**: Long-running operations
 
-### 2. **Verify Server is Running**
+### Streaming with Decorators
 
-Test the MCP endpoints:
-
-```bash
-# List available tools
-curl http://localhost:3000/mcp/tools
-
-# Test a simple tool invocation
-curl -X POST http://localhost:3000/mcp/invoke \
-  -H "Content-Type: application/json" \
-  -d '{"toolName": "GET /api/users", "args": {}}'
-```
-
-### 3. **Configure Your MCP Client**
-
-Choose your preferred MCP client and add the configuration above.
-
-### 4. **Test the Integration**
-
-#### Using Claude Desktop:
-1. Restart Claude Desktop after configuration
-2. Start a new conversation
-3. Ask Claude to "list the available tools" or "get users from the API"
-
-#### Using Cursor:
-1. Restart Cursor after configuration
-2. Open the command palette (Cmd/Ctrl + Shift + P)
-3. Search for "MCP" commands
-4. Test tool invocation
-
-#### Using VS Code:
-1. Restart VS Code after configuration
-2. Use the MCP extension interface
-3. Browse and invoke available tools
-
-## 🧪 **Testing Examples**
-
-### Basic Example Testing
-
-```bash
-# Start the basic server
-cd examples/basic && npx tsx server.ts &
-
-# Test basic endpoints
-curl http://localhost:3000/api/users
-curl -X POST http://localhost:3000/api/users \
-  -H "Content-Type: application/json" \
-  -d '{"name": "John Doe", "email": "john@example.com"}'
-
-# Test MCP integration
-curl http://localhost:3000/mcp/tools
-curl -X POST http://localhost:3000/mcp/invoke \
-  -H "Content-Type: application/json" \
-  -d '{"toolName": "GET /api/users", "args": {}}'
-```
-
-### Streaming Example Testing
-
-```bash
-# Start the streaming server
-cd examples/streaming && npx tsx server.ts &
-
-# Test streaming endpoints directly
-curl http://localhost:3000/api/stream          # Server-Sent Events
-curl http://localhost:3000/api/ndjson         # NDJSON streaming
-curl http://localhost:3000/api/jsonlines      # JSON Lines streaming
-
-# Test streaming via MCP
-curl -X POST http://localhost:3000/mcp/invoke \
-  -H "Content-Type: application/json" \
-  -d '{"toolName": "GET /api/stream", "args": {}, "streaming": true}'
-
-# Test stdio streaming via MCP bridge
-echo '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"GET /api/ndjson","arguments":{"_streaming":true}}}' | \
-  node /path/to/your/expressjs_mcp/scripts/mcp-bridge.cjs
-```
-
-## 🔍 **Troubleshooting**
-
-### Common Issues
-
-#### Server Not Starting
-```bash
-# Check if port 3000 is already in use
-lsof -i :3000
-
-# Kill existing processes
-pkill -f "npx tsx server.ts"
-
-# Try a different port
-PORT=3001 npx tsx server.ts
-```
-
-#### MCP Client Not Connecting
-```bash
-# Test MCP bridge manually
-node /path/to/your/expressjs_mcp/scripts/mcp-bridge.cjs
-
-# Check if server is accessible
-curl http://localhost:3000/mcp/tools
-
-# Verify environment variables
-echo $EXPRESS_MCP_URL
-```
-
-#### Tools Not Appearing
-```bash
-# Verify tools are registered
-curl http://localhost:3000/mcp/tools | jq '.tools[].name'
-
-# Check MCP bridge logs
-DEBUG=1 node /path/to/your/expressjs_mcp/scripts/mcp-bridge.cjs
-```
-
-### Debug Mode
-
-Enable debug logging for troubleshooting:
-
-```bash
-# Start server with debug logging
-DEBUG=expressjs-mcp npx tsx server.ts
-
-# Start MCP bridge with debug logging
-node /path/to/your/expressjs_mcp/scripts/mcp-bridge.cjs
-```
-```
-
-## 📚 **Example Walkthroughs**
-
-### Basic Example Walkthrough
-
-1. **Start the server**: `cd examples/basic && npx tsx server.ts`
-2. **Explore available tools**: Visit http://localhost:3000/mcp/tools
-3. **Test user management**:
-   - Get users: `{"toolName": "GET /api/users", "args": {}}`
-   - Create user: `{"toolName": "POST /api/users", "args": {"name": "Alice", "email": "alice@example.com"}}`
-4. **Configure Claude/Cursor** with the MCP bridge
-5. **Ask your AI assistant** to manage users through the API
-
-### Streaming Example Walkthrough
-
-1. **Start the streaming server**: `cd examples/streaming && npx tsx server.ts`
-2. **Test different streaming types**:
-   - Server-Sent Events: Visit http://localhost:3000/api/stream
-   - NDJSON: `curl http://localhost:3000/api/ndjson`
-   - JSON Lines: `curl http://localhost:3000/api/jsonlines`
-3. **Test streaming via MCP**:
-   - HTTP streaming: Use `streaming: true` flag in invoke requests
-   - stdio streaming: Use `_streaming: true` in MCP bridge
-4. **Configure your MCP client** for streaming support
-5. **Ask your AI assistant** to stream real-time data
+1. **Start**: `pnpm tsx examples/streaming-decorators/server.ts`
+2. **Test SSE**: `curl http://localhost:3010/stream/events`
+3. **Test NDJSON**: Progress updates and chat streaming
+4. **Use case**: Real-time data and AI responses
 
 ## 🎯 **Next Steps**
 
-1. **Customize the examples** for your specific use case
-2. **Add authentication** using Express middleware
-3. **Implement your own streaming endpoints**
-4. **Create custom MCP tool schemas** with Zod annotations
-5. **Deploy to production** with proper error handling and logging
+1. Start with [01-basic-usage](./01-basic-usage) for the simplest setup
+2. Add schemas with [02-full-schema](./02-full-schema)
+3. Learn filtering with [03-custom-endpoints](./03-custom-endpoints)
+4. Explore streaming with [streaming-decorators](./streaming-decorators)
+5. Deploy with [04-separate-server](./04-separate-server)
+
+## 🔍 **Troubleshooting**
+
+### Server Not Starting
+```bash
+# Check if port is in use
+lsof -i :3001
+
+# Use different port
+PORT=3002 pnpm tsx examples/01-basic-usage/server.ts
+```
+
+### Tools Not Appearing
+```bash
+# Verify tools are registered
+curl http://localhost:3001/mcp/tools | jq '.tools[].name'
+
+# Check server logs
+DEBUG=expressjs-mcp pnpm tsx examples/01-basic-usage/server.ts
+```
+
+### MCP Client Not Connecting
+```bash
+# Test native MCP server
+npx expressjs-mcp --url http://localhost:3001/mcp --debug
+
+# Verify endpoints
+curl http://localhost:3001/mcp/tools
+```
 
 ## 📖 **Additional Resources**
 
 - [Express MCP Documentation](../docs/)
 - [MCP Client Setup Guide](../docs/MCP_CLIENT_SETUP.md)
 - [Streaming Documentation](../docs/STREAMING.md)
-- [Quick Setup Guide](../docs/QUICK_MCP_SETUP.md)
+- [Architecture Guide](../docs/ARCHITECTURE.md)
+- [FastAPI-MCP Examples](https://github.com/tadata-org/fastapi_mcp/tree/main/examples)
 
 Happy coding! 🚀

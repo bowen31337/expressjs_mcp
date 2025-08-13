@@ -57,6 +57,18 @@ npm install expressjs-mcp
 pnpm add expressjs-mcp
 ```
 
+### Native MCP Server (New!)
+
+Express-MCP now includes a native MCP server using the official `@modelcontextprotocol/sdk`:
+
+```bash
+# Connect to your Express app
+npx expressjs-mcp --url http://localhost:3000/mcp
+
+# With debug logging
+npx expressjs-mcp --debug
+```
+
 ```ts
 import express from 'express';
 import { ExpressMCP } from 'expressjs-mcp';
@@ -69,6 +81,180 @@ app.get('/hello', (_req, res) => res.json({ message: 'world' }));
 const mcp = new ExpressMCP(app, { mountPath: '/mcp' });
 await mcp.init();
 mcp.mount('/mcp');
+```
+
+## MCP Client Configuration
+
+Once your Express server is running with MCP endpoints, you need to configure your MCP client to connect to it. Here are instructions for popular MCP clients:
+
+### For Cursor IDE
+
+1. **Open Cursor Settings**:
+   - Press `Cmd/Ctrl + ,` to open settings
+   - Search for "MCP" or navigate to Extensions > MCP
+
+2. **Add MCP Server Configuration**:
+   ```json
+   {
+     "mcpServers": {
+       "expressjs-mcp": {
+         "command": "node",
+         "args": ["/path/to/your/project/server.js"],
+         "env": {
+           "NODE_ENV": "production"
+         }
+       }
+     }
+   }
+   ```
+
+3. **Alternative: Use Native MCP Server**:
+   ```json
+   {
+     "mcpServers": {
+       "expressjs-mcp": {
+         "command": "npx",
+         "args": ["expressjs-mcp", "--url", "http://localhost:3000/mcp"]
+       }
+     }
+   }
+   ```
+
+### For Claude Desktop
+
+1. **Edit Configuration File**:
+   - Open `claude_desktop_config.json` in your Claude Desktop settings
+   - Location varies by OS:
+     - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+     - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+     - **Linux**: `~/.config/Claude/claude_desktop_config.json`
+
+2. **Add MCP Server**:
+   ```json
+   {
+     "mcpServers": {
+       "expressjs-mcp": {
+         "command": "node",
+         "args": ["/absolute/path/to/your/project/server.js"],
+         "env": {
+           "NODE_ENV": "production"
+         }
+       }
+     }
+   }
+   ```
+
+3. **Restart Claude Desktop** after making changes
+
+### For Claude Web
+
+1. **Access MCP Settings**:
+   - Go to [claude.ai](https://claude.ai)
+   - Click on your profile/settings
+   - Look for "MCP Configuration" or "Model Context Protocol"
+
+2. **Add Server Configuration**:
+   ```json
+   {
+     "mcpServers": {
+       "expressjs-mcp": {
+         "command": "node",
+         "args": ["/path/to/your/project/server.js"]
+       }
+     }
+   }
+   ```
+
+### For VS Code with MCP Extension
+
+1. **Install MCP Extension**:
+   - Search for "MCP" in VS Code extensions
+   - Install the official MCP extension
+
+2. **Configure in settings.json**:
+   ```json
+   {
+     "mcp.servers": {
+       "expressjs-mcp": {
+         "command": "node",
+         "args": ["/path/to/your/project/server.js"]
+       }
+     }
+   }
+   ```
+
+### For Other MCP Clients
+
+Most MCP clients follow a similar configuration pattern:
+
+```json
+{
+  "mcpServers": {
+    "expressjs-mcp": {
+      "command": "node",
+      "args": ["/path/to/your/project/server.js"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
+}
+```
+
+### Configuration Options
+
+- **`command`**: The command to run (usually `node` for JavaScript/TypeScript)
+- **`args`**: Array of arguments (path to your server file)
+- **`env`**: Environment variables (optional)
+- **`cwd`**: Working directory (optional)
+
+### Testing Your Configuration
+
+1. **Start your Express server**:
+   ```bash
+   node server.js
+   ```
+
+2. **Test MCP endpoints**:
+   ```bash
+   # Check available tools
+   curl http://localhost:3000/mcp/tools
+   
+   # Test a tool invocation
+   curl -X POST http://localhost:3000/mcp/invoke \
+     -H "Content-Type: application/json" \
+     -d '{"toolName": "GET_/hello", "args": {}}'
+   ```
+
+3. **Verify in your MCP client**:
+   - The MCP client should show available tools
+   - You should be able to invoke tools through the client interface
+
+### Troubleshooting
+
+**Common Issues**:
+
+1. **Path Issues**: Use absolute paths in your configuration
+2. **Permission Issues**: Ensure the server file is executable
+3. **Port Conflicts**: Make sure your Express server is running on the expected port
+4. **Environment Variables**: Set `NODE_ENV=production` for better performance
+
+**Debug Mode**:
+```bash
+# Run with debug logging
+NODE_ENV=development node server.js
+
+# Or use the native MCP server with debug
+npx expressjs-mcp --url http://localhost:3000/mcp --debug
+```
+
+**Check MCP Server Status**:
+```bash
+# Test if MCP endpoints are working
+curl http://localhost:3000/mcp/tools | jq .
+
+# Check server health
+curl http://localhost:3000/health
 ```
 
 ## Streaming Support
@@ -126,9 +312,8 @@ curl -X POST http://localhost:3000/mcp/invoke \
 echo '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"GET /api/ndjson","arguments":{"_streaming":true}}}' | \
   npx expressjs-mcp bridge
   
-# Or with local installation:
-echo '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"GET /api/ndjson","arguments":{"_streaming":true}}}' | \
-  node /path/to/your/expressjs_mcp/scripts/mcp-bridge.cjs
+# Test with native MCP server:
+npx expressjs-mcp --url http://localhost:3000/mcp --debug
 
 # Direct endpoint testing
 curl http://localhost:3000/api/sse        # SSE
