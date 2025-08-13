@@ -73,7 +73,7 @@ class ExpressMCPBridge {
         method: method,
         headers: {
           'Content-Type': 'application/json',
-          'User-Agent': 'express-mcp-bridge/1.0'
+          'User-Agent': 'expressjs-mcp-bridge/1.0'
         },
         timeout: 10000
       };
@@ -135,7 +135,7 @@ class MCPServer {
               tools: {}
             },
             serverInfo: {
-              name: 'express-mcp-bridge',
+              name: 'expressjs-mcp-bridge',
               version: '1.0.0'
             }
           };

@@ -64,17 +64,17 @@ The workflow is already configured in `.github/workflows/publish.yml`. It will:
 
 3. **Check GitHub Actions**: Go to Actions tab and verify workflow runs
 
-4. **Verify publication**: Check your package at `https://www.npmjs.com/package/express-mcp`
+4. **Verify publication**: Check your package at `https://www.npmjs.com/package/expressjs-mcp`
 
 ## Package Name Conflicts
 
-If `express-mcp` is already taken on npm, update the name in `package.json`:
+If `expressjs-mcp` is already taken on npm, update the name in `package.json`:
 
 ```json
 {
-  "name": "@your-username/express-mcp",
+  "name": "@your-username/expressjs-mcp",
   // or
-  "name": "express-mcp-fork"
+  "name": "expressjs-mcp-fork"
 }
 ```
 
@@ -84,13 +84,13 @@ Once published, users can install your package:
 
 ```bash
 # Install from npm
-npm install -g express-mcp  # or your package name
+npm install -g expressjs-mcp  # or your package name
 # or
-pnpm add -g express-mcp
+pnpm add -g expressjs-mcp
 
 # Use with npx
-npx express-mcp init
-npx express-mcp test --url http://localhost:3000/mcp
+npx expressjs-mcp init
+npx expressjs-mcp test --url http://localhost:3000/mcp
 ```
 
 ## Troubleshooting

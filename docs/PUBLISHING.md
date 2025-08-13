@@ -56,8 +56,8 @@ The GitHub Actions workflow will automatically:
 ### 3. Verify Publication
 Check that the package was published:
 ```bash
-npm info express-mcp
-npm install express-mcp@latest
+npm info expressjs-mcp
+npm install expressjs-mcp@latest
 ```
 
 ## Requirements for Publishing
@@ -91,16 +91,16 @@ Once published, users can install the package:
 
 ```bash
 # Install globally
-npm install -g express-mcp
-pnpm add -g express-mcp
+npm install -g expressjs-mcp
+pnpm add -g expressjs-mcp
 
 # Use with npx (no installation)
-npx express-mcp init
-npx express-mcp test --url http://localhost:3000/mcp
+npx expressjs-mcp init
+npx expressjs-mcp test --url http://localhost:3000/mcp
 
 # Install in project
-npm install express-mcp
-pnpm add express-mcp
+npm install expressjs-mcp
+pnpm add expressjs-mcp
 ```
 
 ## Troubleshooting
@@ -163,7 +163,7 @@ npm version 1.2.3-rc.1
 ## Package Registry
 
 - **Registry**: https://registry.npmjs.org/
-- **Package Page**: https://www.npmjs.com/package/express-mcp
+- **Package Page**: https://www.npmjs.com/package/expressjs-mcp
 - **Scope**: Public package (no scoping)
 - **Access**: Public (anyone can install)
 

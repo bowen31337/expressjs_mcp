@@ -7,12 +7,12 @@ Get Express MCP running in 3 steps:
 ### Option A: Using npm package (Recommended)
 ```bash
 # Install globally
-npm install -g express-mcp
+npm install -g expressjs-mcp
 # or with pnpm
-pnpm add -g express-mcp
+pnpm add -g expressjs-mcp
 
 # Initialize in your project
-npx express-mcp init
+npx expressjs-mcp init
 ```
 
 ### Option B: Clone and build locally
@@ -64,14 +64,14 @@ Add to your MCP client configuration:
 
 ### Quick Start with CLI (npm package)
 ```bash
-# Initialize express-mcp in your project
-npx express-mcp init
+# Initialize expressjs-mcp in your project
+npx expressjs-mcp init
 
 # Start MCP bridge
-npx express-mcp bridge
+npx expressjs-mcp bridge
 
 # Test connection
-npx express-mcp test --url http://localhost:3000/mcp
+npx expressjs-mcp test --url http://localhost:3000/mcp
 ```
 
 ### Alternative: Local installation commands
@@ -82,9 +82,9 @@ node scripts/mcp-bridge.cjs
 node bin/express-mcp.cjs test --url http://localhost:3000/mcp
 
 # Or if you used npm link
-npx express-mcp init
-npx express-mcp bridge --url http://localhost:3000/mcp
-npx express-mcp test
+npx expressjs-mcp init
+npx expressjs-mcp bridge --url http://localhost:3000/mcp
+npx expressjs-mcp test
 ```
 
 ## Streaming Support
@@ -167,7 +167,7 @@ curl -X POST http://localhost:3000/mcp/invoke \
 #### Using npm package:
 ```bash
 echo '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"GET /api/ndjson","arguments":{"_streaming":true}}}' | \
-  npx express-mcp bridge
+  npx expressjs-mcp bridge
 ```
 
 #### Using local installation:
@@ -198,7 +198,7 @@ curl http://localhost:3000/api/custom
   "mcpServers": {
     "express-api": {
       "command": "npx",
-      "args": ["express-mcp", "bridge"],
+      "args": ["expressjs-mcp", "bridge"],
       "env": {
         "EXPRESS_MCP_URL": "http://localhost:3000/mcp"
       }
@@ -231,7 +231,7 @@ Test your setup:
 ### Using npm package:
 ```bash
 # Test MCP connection
-npx express-mcp test --url http://localhost:3000/mcp
+npx expressjs-mcp test --url http://localhost:3000/mcp
 
 # List available tools
 curl http://localhost:3000/mcp/tools

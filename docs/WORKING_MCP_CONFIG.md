@@ -4,7 +4,7 @@ This guide provides **working configurations** for MCP clients with Express MCP 
 
 ## 🚨 **Important Note**
 
-The `npx express-mcp` commands in other documentation **won't work** until the package is published to npm. Use the configurations below instead.
+The `npx expressjs-mcp` commands in other documentation **won't work** until the package is published to npm. Use the configurations below instead.
 
 ## ✅ **Working Solutions**
 
@@ -19,7 +19,7 @@ Create or update `~/Library/Application Support/Claude/claude_desktop_config.jso
 ```json
 {
   "mcpServers": {
-    "express-mcp-basic": {
+    "expressjs-mcp-basic": {
       "command": "node",
       "args": ["/path/to/your/expressjs_mcp/scripts/mcp-bridge.cjs"],
       "env": {
@@ -40,7 +40,7 @@ Add to your Cursor settings (`.cursor-settings/settings.json`):
 ```json
 {
   "mcp.servers": {
-    "express-mcp-basic": {
+    "expressjs-mcp-basic": {
       "command": "node", 
       "args": ["/path/to/your/expressjs_mcp/scripts/mcp-bridge.cjs"],
       "env": {
@@ -60,7 +60,7 @@ Add to VS Code settings:
 {
   "mcp.servers": [
     {
-      "name": "express-mcp-basic",
+      "name": "expressjs-mcp-basic",
       "command": "node",
       "args": ["/path/to/your/expressjs_mcp/scripts/mcp-bridge.cjs"],
       "env": {
@@ -84,7 +84,7 @@ cd /path/to/your/expressjs_mcp
 npm link
 
 # Now npx commands will work
-npx express-mcp bridge --url http://localhost:3000/mcp
+npx expressjs-mcp bridge --url http://localhost:3000/mcp
 ```
 
 After `npm link`, you can use the original `npx` configurations:
@@ -92,9 +92,9 @@ After `npm link`, you can use the original `npx` configurations:
 ```json
 {
   "mcpServers": {
-    "express-mcp-basic": {
+    "expressjs-mcp-basic": {
       "command": "npx",
-      "args": ["express-mcp", "bridge"],
+      "args": ["expressjs-mcp", "bridge"],
       "env": {
         "EXPRESS_MCP_URL": "http://localhost:3000/mcp"
       }
@@ -110,7 +110,7 @@ If you're in the project directory, you can use package scripts.
 ```json
 {
   "mcpServers": {
-    "express-mcp-basic": {
+    "expressjs-mcp-basic": {
       "command": "pnpm",
       "args": ["mcp-bridge"],
       "cwd": "/path/to/your/expressjs_mcp",
@@ -134,7 +134,7 @@ node /path/to/your/expressjs_mcp/scripts/mcp-bridge.cjs
 EXPRESS_MCP_URL=http://localhost:3000/mcp node /path/to/your/expressjs_mcp/scripts/mcp-bridge.cjs
 
 # Test if npm link worked (if you used Option 2)
-npx express-mcp bridge --url http://localhost:3000/mcp
+npx expressjs-mcp bridge --url http://localhost:3000/mcp
 ```
 
 ### 2. Test MCP Communication
@@ -181,7 +181,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "express-mcp-basic": {
+    "expressjs-mcp-basic": {
       "command": "node",
       "args": ["/path/to/your/expressjs_mcp/scripts/mcp-bridge.cjs"],
       "env": {
@@ -229,16 +229,16 @@ node --version
 
 ## 🚀 **Publishing to NPM (Future)**
 
-To make `npx express-mcp` work globally, you'll need to:
+To make `npx expressjs-mcp` work globally, you'll need to:
 
 1. **Update package.json**:
 ```json
 {
-  "name": "express-mcp",
+  "name": "expressjs-mcp",
   "version": "1.0.0",
   "private": false,
   "bin": {
-    "express-mcp": "./bin/express-mcp.cjs"
+    "expressjs-mcp": "./bin/express-mcp.cjs"
   }
 }
 ```
@@ -257,7 +257,7 @@ npm publish
 
 3. **Then users can use**:
 ```bash
-npx express-mcp bridge --url http://localhost:3000/mcp
+npx expressjs-mcp bridge --url http://localhost:3000/mcp
 ```
 
 ## 📖 **Alternative: Local Package Installation**
@@ -269,7 +269,7 @@ You can also install the package locally in other projects:
 npm install /path/to/your/expressjs_mcp
 
 # Then use
-npx express-mcp bridge --url http://localhost:3000/mcp
+npx expressjs-mcp bridge --url http://localhost:3000/mcp
 ```
 
 ## ✅ **Recommended Approach**

@@ -1,5 +1,5 @@
 {
-	"name": "express-mcp",
+	"name": "expressjs-mcp",
 	"version": "0.1.0",
 	"description": "Expose your Express endpoints as MCP tools with zero configuration, schema preservation, and streaming support",
 	"keywords": [
@@ -47,8 +47,8 @@
 		"mcp": "node bin/express-mcp.cjs"
 	},
 	"bin": {
-		"express-mcp": "./bin/express-mcp.cjs",
-		"express-mcp-bridge": "./scripts/mcp-bridge.cjs"
+		"expressjs-mcp": "./bin/express-mcp.cjs",
+		"expressjs-mcp-bridge": "./scripts/mcp-bridge.cjs"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.8.3",

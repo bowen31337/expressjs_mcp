@@ -6,7 +6,7 @@ Install
 
 Mount mode
 ```ts
-import { ExpressMCP } from 'express-mcp';
+import { ExpressMCP } from 'expressjs-mcp';
 const mcp = new ExpressMCP(app, { mountPath: '/mcp', openapi }); // openapi optional
 await mcp.init();
 mcp.mount('/mcp');

@@ -305,7 +305,7 @@ PORT=3001 npx tsx server.ts
 curl http://localhost:3000/mcp/tools
 
 # Check server logs for errors
-DEBUG=express-mcp npx tsx server.ts
+DEBUG=expressjs-mcp npx tsx server.ts
 ```
 
 ### MCP Bridge Connection Issues

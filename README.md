@@ -12,19 +12,19 @@ Expose your Express endpoints as MCP tools (mount to your app or run a standalon
 - **Flexible Deployment**: Mount to same app or run standalone
 - **In-Process Efficiency**: Direct middleware execution (no HTTP overhead)
 - **🚀 Streaming Support**: Handle Server-Sent Events, file downloads, and real-time data
-- **📦 NPX/Bunx Commands**: Easy CLI access with `npx express-mcp` and `bunx express-mcp`
+- **📦 NPX/Bunx Commands**: Easy CLI access with `npx expressjs-mcp` and `bunx expressjs-mcp`
 
 ## Installation
 
 ### Option 1: Install from npm (Recommended)
 ```bash
 # Install globally or locally
-npm install -g express-mcp
+npm install -g expressjs-mcp
 # or with pnpm
-pnpm add -g express-mcp
+pnpm add -g expressjs-mcp
 
 # Use with npx (no installation required)
-npx express-mcp init
+npx expressjs-mcp init
 ```
 
 ### Option 2: Clone and build locally
@@ -39,27 +39,27 @@ pnpm install && pnpm build
 ### Option 1: CLI Commands (Recommended)
 ```bash
 # Initialize in your project (works with npm package or locally built)
-npx express-mcp init
+npx expressjs-mcp init
 # or if installed locally: node bin/express-mcp.cjs init
 
 # Start your server
 node server.js
 
 # Test connection
-npx express-mcp test --url http://localhost:3000/mcp
+npx expressjs-mcp test --url http://localhost:3000/mcp
 # or if installed locally: node bin/express-mcp.cjs test --url http://localhost:3000/mcp
 ```
 
 ### Option 2: Manual Setup
 ```bash
-npm install express-mcp
+npm install expressjs-mcp
 # or
-pnpm add express-mcp
+pnpm add expressjs-mcp
 ```
 
 ```ts
 import express from 'express';
-import { ExpressMCP } from 'express-mcp';
+import { ExpressMCP } from 'expressjs-mcp';
 
 const app = express();
 app.use(express.json());
@@ -124,7 +124,7 @@ curl -X POST http://localhost:3000/mcp/invoke \
 
 # stdio Streaming via MCP Bridge (npm package)
 echo '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"GET /api/ndjson","arguments":{"_streaming":true}}}' | \
-  npx express-mcp bridge
+  npx expressjs-mcp bridge
   
 # Or with local installation:
 echo '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"GET /api/ndjson","arguments":{"_streaming":true}}}' | \

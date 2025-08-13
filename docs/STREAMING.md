@@ -208,11 +208,11 @@ For MCP client communication with progressive updates.
 ### MCP Bridge Usage
 ```bash
 # Start the bridge
-npx express-mcp bridge --debug
+npx expressjs-mcp bridge --debug
 
 # Send streaming request
 echo '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"GET /api/events","arguments":{"_streaming":true}}}' | \
-  npx express-mcp bridge
+  npx expressjs-mcp bridge
 ```
 
 ### Progressive Notifications
@@ -274,7 +274,7 @@ curl -X POST "$BASE_URL/mcp/invoke" \
 # Test 5: MCP stdio Streaming
 echo -e "\n🔌 Testing MCP stdio Streaming..."
 echo '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"GET /api/users/stream","arguments":{"_streaming":true}}}' | \
-  timeout 5s npx express-mcp bridge || echo "stdio streaming test completed"
+  timeout 5s npx expressjs-mcp bridge || echo "stdio streaming test completed"
 
 echo -e "\n✅ All streaming tests completed!"
 ```

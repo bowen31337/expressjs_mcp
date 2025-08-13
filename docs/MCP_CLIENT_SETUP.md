@@ -14,7 +14,7 @@ First, ensure your Express app is configured with express_mcp:
 ```typescript
 // server.ts
 import express from 'express';
-import { ExpressMCP } from 'express-mcp';
+import { ExpressMCP } from 'expressjs-mcp';
 
 const app = express();
 app.use(express.json());
@@ -315,7 +315,7 @@ services:
 
 ```typescript
 // mcp-server.ts
-import { ExpressMCP } from 'express-mcp';
+import { ExpressMCP } from 'expressjs-mcp';
 import { createExpressApp } from './app'; // Your existing app
 
 const app = createExpressApp();

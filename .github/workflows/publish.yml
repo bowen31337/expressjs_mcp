@@ -68,7 +68,7 @@ jobs:
           echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
           
           # Check if this version exists on npm
-          if npm view express-mcp@$CURRENT_VERSION version 2>/dev/null; then
+          if npm view expressjs-mcp@$CURRENT_VERSION version 2>/dev/null; then
             echo "version_exists=true" >> $GITHUB_OUTPUT
           else
             echo "version_exists=false" >> $GITHUB_OUTPUT
@@ -91,19 +91,19 @@ jobs:
           body: |
             ## Changes in v${{ steps.check-version.outputs.current_version }}
             
-            Published to NPM: https://www.npmjs.com/package/express-mcp
+            Published to NPM: https://www.npmjs.com/package/expressjs-mcp
             
             Install with:
             ```bash
-            npm install express-mcp
+            npm install expressjs-mcp
             # or
-            pnpm add express-mcp
+            pnpm add expressjs-mcp
             ```
             
             Use with npx:
             ```bash
-            npx express-mcp init
-            npx express-mcp test --url http://localhost:3000/mcp
+            npx expressjs-mcp init
+            npx expressjs-mcp test --url http://localhost:3000/mcp
             ```
           draft: false
           prerelease: false

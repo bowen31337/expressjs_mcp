@@ -62,7 +62,7 @@ Create or update `~/Library/Application Support/Claude/claude_desktop_config.jso
 ```json
 {
   "mcpServers": {
-    "express-mcp-basic": {
+    "expressjs-mcp-basic": {
       "command": "node",
       "args": ["/path/to/your/expressjs_mcp/scripts/mcp-bridge.cjs"],
       "env": {
@@ -82,7 +82,7 @@ Add to your Cursor settings (`.cursor-settings/settings.json`):
 ```json
 {
   "mcp.servers": {
-    "express-mcp-basic": {
+    "expressjs-mcp-basic": {
       "command": "node",
       "args": ["/path/to/your/expressjs_mcp/scripts/mcp-bridge.cjs"],
       "env": {
@@ -103,7 +103,7 @@ Add to VS Code settings:
 {
   "mcp.servers": [
     {
-      "name": "express-mcp-basic",
+      "name": "expressjs-mcp-basic",
       "command": "node",
       "args": ["/path/to/your/expressjs_mcp/scripts/mcp-bridge.cjs"],
       "env": {
@@ -258,7 +258,7 @@ Enable debug logging for troubleshooting:
 
 ```bash
 # Start server with debug logging
-DEBUG=express-mcp npx tsx server.ts
+DEBUG=expressjs-mcp npx tsx server.ts
 
 # Start MCP bridge with debug logging
 node /path/to/your/expressjs_mcp/scripts/mcp-bridge.cjs

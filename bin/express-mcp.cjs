@@ -6,7 +6,7 @@ const { spawn } = require("node:child_process");
 const fs = require("node:fs");
 
 program
-	.name("express-mcp")
+	.name("expressjs-mcp")
 	.description("Express MCP CLI tools")
 	.version("1.0.0");
 
@@ -44,10 +44,10 @@ program
 
 program
 	.command("init")
-	.description("Initialize express-mcp in current project")
+	.description("Initialize expressjs-mcp in current project")
 	.option("--typescript", "Generate TypeScript configuration")
 	.action((options) => {
-		console.log("🚀 Initializing express-mcp in current project...");
+		          console.log("🚀 Initializing expressjs-mcp in current project...");
 
 		const isTypeScript = options.typescript || fs.existsSync("tsconfig.json");
 		const ext = isTypeScript ? "ts" : "js";
@@ -56,7 +56,7 @@ program
 		const serverContent = isTypeScript
 			? `
 import express from 'express';
-import { ExpressMCP } from 'express-mcp';
+import { ExpressMCP } from 'expressjs-mcp';
 
 const app = express();
 app.use(express.json());
@@ -92,7 +92,7 @@ app.listen(port, () => {
 `
 			: `
 const express = require('express');
-const { ExpressMCP } = require('express-mcp');
+const { ExpressMCP } = require('expressjs-mcp');
 
 const app = express();
 app.use(express.json());
@@ -140,7 +140,7 @@ setupMCP().catch(console.error);
 			mcpServers: {
 				"express-api": {
 					command: "npx",
-					args: ["express-mcp", "bridge"],
+					                                  args: ["expressjs-mcp", "bridge"],
 					env: {
 						EXPRESS_MCP_URL: "http://localhost:3000/mcp",
 					},
