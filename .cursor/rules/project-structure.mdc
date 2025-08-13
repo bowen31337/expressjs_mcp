@@ -1,0 +1,46 @@
+---
+alwaysApply: true
+---
+
+# Express MCP Project Structure
+
+This project follows the FastAPI-MCP pattern for TypeScript/Express applications.
+
+## Core Architecture
+
+The main entry point is [src/index.ts](mdc:src/index.ts), which exports the `ExpressMCP` class.
+
+### Key Modules:
+- [src/routeIntrospector.ts](mdc:src/routeIntrospector.ts) - Discovers routes from Express app's `_router.stack`
+- [src/inMemoryDispatcher.ts](mdc:src/inMemoryDispatcher.ts) - Executes synthetic requests through middleware chain
+- [src/schemaResolver.ts](mdc:src/schemaResolver.ts) - Builds tool schemas from OpenAPI/annotations
+- [src/mcpServer.ts](mdc:src/mcpServer.ts) - HTTP gateway for MCP tools at `/mcp/tools` and `/mcp/invoke`
+
+## Usage Patterns
+
+Mount to existing Express app:
+```ts
+const mcp = new ExpressMCP(app, { mountPath: '/mcp' });
+await mcp.init();
+mcp.mount('/mcp');
+```
+
+Standalone HTTP gateway:
+```ts
+await mcp.startStandalone({ port: 7878 });
+```
+
+## Configuration
+
+- Use [package.json](mdc:package.json) with pnpm as package manager
+- TypeScript config in [tsconfig.json](mdc:tsconfig.json)
+- Biome for linting/formatting via [biome.json](mdc:biome.json)
+- Vitest for testing via [vitest.config.ts](mdc:vitest.config.ts)
+
+## Testing
+
+Tests are in `tests/` directory using Vitest. Example: [tests/routeIntrospector.test.ts](mdc:tests/routeIntrospector.test.ts)
+
+## Examples
+
+Basic usage example in [examples/basic/server.ts](mdc:examples/basic/server.ts)

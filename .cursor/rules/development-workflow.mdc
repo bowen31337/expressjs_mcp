@@ -1,0 +1,48 @@
+---
+description: Development workflow and commands
+---
+
+# Development Workflow
+
+## Package Management
+Use pnpm as the package manager (not npm or yarn):
+```bash
+pnpm install
+pnpm add <package>
+pnpm add -D <dev-package>
+```
+
+## Development Commands
+- `pnpm dev` - Watch mode compilation with tsup
+- `pnpm build` - Production build (ESM + CJS + types)
+- `pnpm lint` - Check code with Biome
+- `pnpm lint:fix` - Fix linting issues automatically
+- `pnpm test` - Run tests with Vitest
+- `pnpm test:watch` - Watch mode testing
+
+## Testing Strategy
+Follow TDD principles:
+1. Write tests first for new features
+2. Ensure 90%+ coverage on core modules
+3. Test both unit and integration scenarios
+4. Use supertest for HTTP endpoint testing
+
+## Code Quality
+- Biome handles linting, formatting, and import organization
+- TypeScript strict mode enabled
+- All code must pass linting before commit
+- Run tests before continuing to next task
+
+## File Organization
+```
+src/           # Source code
+tests/         # Test files
+examples/      # Usage examples
+docs/          # Documentation
+.cursor/rules/ # Cursor AI rules
+```
+
+## Build Output
+- `dist/index.cjs` - CommonJS build
+- `dist/index.mjs` - ES Module build  
+- `dist/index.d.ts` - TypeScript declarations

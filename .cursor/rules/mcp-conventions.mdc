@@ -1,0 +1,47 @@
+---
+description: MCP tool conventions and patterns
+---
+
+# MCP Tool Conventions
+
+## Tool Naming
+- `title`: Human-readable format like `"GET /users"`
+- `name`: Safe identifier format like `"GET_/users"` (spaces → underscores)
+
+## Schema Structure
+Tools must have consistent schema structure:
+```ts
+{
+  name: string,           // Safe identifier
+  title: string,          // Human readable
+  description: string,    // What the tool does
+  inputSchema: object,    // JSON Schema for input
+  outputSchema: object,   // JSON Schema for output
+  examples: any[],        // Usage examples
+  route: { method, path } // Original Express route info
+}
+```
+
+## HTTP Gateway Endpoints
+- `GET /mcp/tools` - List all available tools
+- `POST /mcp/invoke` - Invoke a tool with `{ toolName, args }`
+
+## Response Format
+Invocation responses follow this pattern:
+```ts
+// Success
+{ ok: true, result: any, status: number }
+
+// Error
+{ ok: false, error: string }
+```
+
+## Schema Priority
+1. Per-route zod annotations (`schemaAnnotations`)
+2. OpenAPI v3 specification (`openapi` option)
+3. Permissive fallback (`{ type: 'object', additionalProperties: true }`)
+
+## Auth Integration
+- Reuse existing Express middleware chain
+- No bypass of authentication/authorization
+- Preserve 401/403 responses from middleware

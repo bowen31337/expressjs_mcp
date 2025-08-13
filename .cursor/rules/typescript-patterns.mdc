@@ -1,0 +1,48 @@
+---
+globs: *.ts,*.tsx
+---
+
+# TypeScript Patterns for Express MCP
+
+## Code Style
+- Use strict TypeScript with proper typing
+- Prefer `type` over `interface` for simple object shapes
+- Use `import type` for type-only imports
+- Always use semicolons and trailing commas
+
+## Express Integration Patterns
+
+### Route Discovery
+When working with Express route introspection:
+```ts
+// Access internal router stack
+const router: any = (this.app as any)._router;
+if (!router?.stack) return [];
+```
+
+### Synthetic Request/Response
+For in-memory dispatch, create synthetic req/res objects:
+```ts
+const req: any = new Readable({ read() {} });
+req.method = method;
+req.url = path;
+req.headers = { 'content-type': 'application/json', ...headers };
+```
+
+### Schema Resolution
+Support multiple schema sources with fallbacks:
+```ts
+// Priority: zod annotations > OpenAPI > permissive fallback
+const schema = ann.input ? this.zodToJsonSchema(ann.input) : 
+               (open.inputSchema ?? { type: 'object', additionalProperties: true });
+```
+
+## Error Handling
+- Always wrap async operations in try/catch
+- Use structured logging with context
+- Map errors appropriately for MCP responses
+
+## Testing Patterns
+- Use Vitest with supertest for HTTP testing
+- Mock Express apps for unit tests
+- Test both mount and standalone modes
