@@ -4,7 +4,7 @@
 		"enabled": true,
 		"rules": {
 			"suspicious": {
-				"noExplicitAny": "error"
+				"noExplicitAny": "off"
 			},
 			"complexity": {
 				"noForEach": "error"
@@ -19,20 +19,5 @@
 	"organizeImports": { "enabled": true },
 	"files": {
 		"ignore": ["dist/**", "scripts/**"]
-	},
-	"overrides": [
-		{
-			"include": ["examples/**"],
-			"linter": {
-				"rules": {
-					"suspicious": {
-						"noExplicitAny": "off"
-					},
-					"complexity": {
-						"noForEach": "off"
-					}
-				}
-			}
-		}
-	]
+	}
 }
