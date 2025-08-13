@@ -1,41 +1,38 @@
 /**
  * Example 01: Basic Usage
- * 
+ *
  * This example demonstrates the simplest way to add MCP capabilities to an Express app.
  * It automatically exposes all routes as MCP tools with minimal configuration.
  */
 
-import { app } from "../shared/app";
-import { ExpressMCP } from "../../src/index";
+import express from "express";
+import { ExpressMCP } from "../../src";
 
-// Create and configure ExpressMCP
-const mcp = new ExpressMCP(app, {
-  // Basic configuration - uses defaults for most settings
-  mountPath: "/mcp",
-});
+const app = express();
+app.use(express.json());
 
-// Initialize MCP (discovers routes and creates tools)
-async function start() {
-  await mcp.init();
-  
-  // Mount MCP endpoints to the Express app
-  mcp.mount();
-  
-  // Start the Express server
-  const PORT = process.env.PORT || 3001;
-  app.listen(PORT, () => {
-    console.log(`✅ Express server running on http://localhost:${PORT}`);
-    console.log(`📡 MCP tools available at http://localhost:${PORT}/mcp/tools`);
-    console.log(`🚀 MCP invoke endpoint at http://localhost:${PORT}/mcp/invoke`);
-    
-    // List discovered tools
-    const tools = mcp.listTools();
-    console.log(`\n🔧 Discovered ${tools.length} MCP tools:`);
-    tools.forEach((tool: any) => {
-      console.log(`  - ${tool.title}: ${tool.description}`);
-    });
-  });
+app.get("/hello", (_req, res) => res.json({ message: "world" }));
+app.post("/order", (req, res) =>
+	res.status(201).json({ id: "o1", ...req.body }),
+);
+
+const mcp = new ExpressMCP(app, { mountPath: "/mcp" });
+await mcp.init();
+mcp.mount("/mcp");
+
+app.listen(3000, () =>
+	console.log("App on http://localhost:3000 → /mcp/tools, /mcp/invoke"),
+);
+
+// Demo: List available tools
+if (process.env.NODE_ENV !== "production") {
+	// Show available tools in development
+	setTimeout(() => {
+		const tools = mcp.listTools();
+		console.log(`\n🔧 Discovered ${tools.length} MCP tools:`);
+		for (const tool of tools) {
+			const toolObj = tool as { title: string; description: string };
+			console.log(`  - ${toolObj.title}: ${toolObj.description}`);
+		}
+	});
 }
-
-// Start the server
-start().catch(console.error);
